@@ -34,26 +34,12 @@ public class ArticleDAOImpl implements ArticleDAO {
     }
 
     @Override
-    public Article updateArticleTitle(Long id, String title) throws Exception {
+    public Article updateArticle(Long id, String title, String content) throws Exception {
         Optional<Article> selectedArticle = articleRepository.findById(id);
         Article updatedArticle;
         if (selectedArticle.isPresent()) {
             Article article = selectedArticle.get();
             article.setTitle(title);
-            updatedArticle = articleRepository.save(article);
-        } else {
-            throw new Exception();
-        }
-
-        return updatedArticle;
-    }
-
-    @Override
-    public Article updateArticleContent(Long id, String content) throws Exception {
-        Optional<Article> selectedArticle = articleRepository.findById(id);
-        Article updatedArticle;
-        if (selectedArticle.isPresent()) {
-            Article article = selectedArticle.get();
             article.setTitle(content);
             updatedArticle = articleRepository.save(article);
         } else {

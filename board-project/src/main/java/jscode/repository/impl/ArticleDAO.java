@@ -13,9 +13,7 @@ public interface ArticleDAO {
 
     Article selectArticle(Long id);
 
-    Article updateArticleTitle(Long id, String title) throws Exception;
-
-    Article updateArticleContent(Long id, String content) throws Exception;
+    Article updateArticle(Long id, String title, String content) throws Exception;
 
     void deleteArticle(Long id) throws Exception;
 }

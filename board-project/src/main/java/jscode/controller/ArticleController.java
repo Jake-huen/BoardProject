@@ -33,7 +33,7 @@ public class ArticleController {
     }
 
     @PostMapping("/change")
-    public ResponseEntity<ArticleDto> changeArticle(@RequestBody ArticleDto articleDto) {
+    public ResponseEntity<ArticleDto> changeArticle(@RequestBody ArticleDto articleDto) throws Exception {
         return ResponseEntity.status(HttpStatus.OK).body(articleService.updateArticle(articleDto.getId(),articleDto.getTitle(),articleDto.getContent()));
     }
 

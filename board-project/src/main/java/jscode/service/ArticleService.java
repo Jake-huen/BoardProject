@@ -3,14 +3,11 @@ package jscode.service;
 import jscode.domain.Article;
 import jscode.domain.dto.ArticleDto;
 import jscode.repository.ArticleDAOImpl;
-import jscode.repository.ArticleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -43,8 +40,8 @@ public class ArticleService {
 //                .collect(Collectors.toList());
     }
 
-    public ArticleDto updateArticle(Long id, String title, String content) {
-        Article selectedArticle = articleDAO.selectArticle(id);
+    public ArticleDto updateArticle(Long id, String title, String content) throws Exception {
+        Article selectedArticle = articleDAO.updateArticle(id, title, content);
         selectedArticle.setTitle(title);
         selectedArticle.setContent(content);
         return new ArticleDto(selectedArticle.getId(), selectedArticle.getTitle(), selectedArticle.getContent());
