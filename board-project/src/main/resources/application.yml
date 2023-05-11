@@ -1,0 +1,16 @@
+#spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+#spring.datasource.url=jdbc:mysql://localhost:3306/board
+#spring.datasource.username=root
+#spring.datasource.password=rlaxogjs8312
+
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: create
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+  profiles:
+    include: secure
+  sql.init.mode: always

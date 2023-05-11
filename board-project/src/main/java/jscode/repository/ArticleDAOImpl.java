@@ -38,9 +38,15 @@ public class ArticleDAOImpl implements ArticleDAO {
         Optional<Article> selectedArticle = articleRepository.findById(id);
         Article updatedArticle;
         if (selectedArticle.isPresent()) {
-            Article article = selectedArticle.get();
-            article.setTitle(title);
-            article.setTitle(content);
+            if (title == null) {
+                title = selectedArticle.get().getTitle();
+            }
+            if (content == null) {
+                content = selectedArticle.get().getContent();
+            }
+            Article article = Article.builder()
+                    .title(title)
+                    .content(content).build();
             updatedArticle = articleRepository.save(article);
         } else {
             throw new Exception();
