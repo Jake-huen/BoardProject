@@ -5,15 +5,10 @@ import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
-@Getter @Setter
+@Getter
+@RequiredArgsConstructor
 public class ArticleDto {
-    private Long id;
-    private String title;
-    private String content;
-
-    public ArticleDto(Long id, String title, String content) {
-        this.id = id;
-        this.title = title;
-        this.content = content;
-    }
+    private final Long id;
+    private final String title;
+    private final String content;
 }

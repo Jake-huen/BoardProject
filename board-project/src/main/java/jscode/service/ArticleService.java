@@ -16,10 +16,10 @@ public class ArticleService {
     private final ArticleDAOImpl articleDAO;
 
     public ArticleDto saveArticle(ArticleDto articleDto) {
-        Article article = new Article();
-        article.setTitle(articleDto.getTitle());
-        article.setContent(articleDto.getContent());
-
+        Article article = Article.builder()
+                .title(articleDto.getTitle())
+                .content(articleDto.getContent())
+                .build();
         Article savedArticle = articleDAO.insertArticle(article);
 
         return new ArticleDto(savedArticle.getId(), savedArticle.getTitle(), savedArticle.getContent());
@@ -42,8 +42,6 @@ public class ArticleService {
 
     public ArticleDto updateArticle(Long id, String title, String content) throws Exception {
         Article selectedArticle = articleDAO.updateArticle(id, title, content);
-        selectedArticle.setTitle(title);
-        selectedArticle.setContent(content);
         return new ArticleDto(selectedArticle.getId(), selectedArticle.getTitle(), selectedArticle.getContent());
     }
 
