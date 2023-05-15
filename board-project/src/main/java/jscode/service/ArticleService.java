@@ -40,6 +40,16 @@ public class ArticleService {
 //                .collect(Collectors.toList());
     }
 
+    public List<ArticleDto> getSortedAllArticles() {
+        List<Article> articles = articleDAO.findTopNByOrderByCreatedAtDesc(100);
+        List<ArticleDto> articleDtos = new ArrayList<>();
+        articles.stream().forEach(article -> articleDtos.add(new ArticleDto(article.getId(), article.getTitle(), article.getContent(), article.getCreatedAt(), article.getUpdatedAt())));
+        return articleDtos;
+//        return articleDAO.selectAllArticle().stream()
+//                .map(article -> new ArticleDto(article.getTitle(), article.getContent()))
+//                .collect(Collectors.toList());
+    }
+
     public ArticleDto updateArticle(ArticleDto articleDto) throws Exception {
         Article selectedArticle = articleDAO.updateArticle(articleDto);
         return new ArticleDto(selectedArticle.getId(), selectedArticle.getTitle(), selectedArticle.getContent(), selectedArticle.getCreatedAt(), selectedArticle.getUpdatedAt());

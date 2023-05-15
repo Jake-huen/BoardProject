@@ -10,6 +10,8 @@ public interface ArticleDAO {
 
     List<Article> selectAllArticle();
 
+    List<Article> findTopNByOrderByCreatedAtDesc(int n);
+
     Article selectArticle(Long id);
 
     Article updateArticle(ArticleDto articleDto) throws Exception;

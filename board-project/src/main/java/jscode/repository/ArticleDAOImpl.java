@@ -4,6 +4,10 @@ import jscode.domain.Article;
 import jscode.domain.dto.ArticleDto;
 import jscode.repository.impl.ArticleDAO;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
 import javax.swing.text.html.Option;
@@ -27,6 +31,13 @@ public class ArticleDAOImpl implements ArticleDAO {
     public List<Article> selectAllArticle() {
         List<Article> articleList = articleRepository.findAll();
         return articleList;
+    }
+
+    @Override
+    public List<Article> findTopNByOrderByCreatedAtDesc(int n) {
+        Pageable pageable = PageRequest.of(0, n, Sort.by("createdAt").descending());
+        Page<Article> page = articleRepository.findAll(pageable);
+        return page.getContent();
     }
 
     @Override
