@@ -2,6 +2,8 @@ package jscode.repository.impl;
 
 import jscode.domain.Article;
 import jscode.domain.dto.ArticleDto;
+import org.springframework.data.domain.Pageable;
+
 import java.util.List;
 
 public interface ArticleDAO {
@@ -16,7 +18,7 @@ public interface ArticleDAO {
 
     Article updateArticle(ArticleDto articleDto) throws Exception;
 
-    List<Article> searchTopNOrderByCreatedAtDesc(String keyword, int n);
+    List<Article> searchTopNOrderByCreatedAtDesc(Pageable page, String keyword, int n);
 
     void deleteArticle(Long id) throws Exception;
 }

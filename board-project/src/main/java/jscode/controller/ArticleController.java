@@ -3,11 +3,11 @@ package jscode.controller;
 import jscode.domain.dto.ArticleDto;
 import jscode.service.ArticleService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
@@ -32,9 +32,9 @@ public class ArticleController {
         return ResponseEntity.status(HttpStatus.OK).body(articleService.getSortedAllArticles());
     }
 
-    @GetMapping("/search")
-    public ResponseEntity<List<ArticleDto>> searchArticles(@RequestParam String keyword) {
-        return ResponseEntity.status(HttpStatus.OK).body(articleService.searchArticles(keyword));
+    @GetMapping("/search-title")
+    public ResponseEntity<List<ArticleDto>> searchArticles(Pageable page, @RequestParam String keyword) {
+        return ResponseEntity.status(HttpStatus.OK).body(articleService.searchArticles(page,keyword));
     }
 
     @PostMapping()

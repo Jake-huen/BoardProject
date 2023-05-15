@@ -72,8 +72,8 @@ public class ArticleDAOImpl implements ArticleDAO {
     }
 
     @Override
-    public List<Article> searchTopNOrderByCreatedAtDesc(String keyword, int n) {
-        Pageable pageable = PageRequest.of(0, n, Sort.by("createdAt").descending());
+    public List<Article> searchTopNOrderByCreatedAtDesc(Pageable page, String keyword, int n) {
+        Pageable pageable = PageRequest.of(page.getPageNumber(), n, Sort.by("createdAt").descending());
         return articleRepository.findByTitleContainingOrderByCreatedAtDesc(keyword, pageable);
     }
 
