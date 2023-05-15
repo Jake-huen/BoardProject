@@ -1,10 +1,8 @@
 package jscode.repository.impl;
 
 import jscode.domain.Article;
-
-import javax.transaction.Transactional;
+import jscode.domain.dto.ArticleDto;
 import java.util.List;
-import java.util.Optional;
 
 public interface ArticleDAO {
 
@@ -14,7 +12,7 @@ public interface ArticleDAO {
 
     Article selectArticle(Long id);
 
-    Article updateArticle(Long id, String title, String content) throws Exception;
+    Article updateArticle(ArticleDto articleDto) throws Exception;
 
     void deleteArticle(Long id) throws Exception;
 }
