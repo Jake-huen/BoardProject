@@ -1,10 +1,10 @@
 package jscode.repository.impl;
 
 import jscode.domain.Article;
+import jscode.domain.dto.ArticleDto;
+import org.springframework.data.domain.Pageable;
 
-import javax.transaction.Transactional;
 import java.util.List;
-import java.util.Optional;
 
 public interface ArticleDAO {
 
@@ -12,9 +12,13 @@ public interface ArticleDAO {
 
     List<Article> selectAllArticle();
 
+    List<Article> findTopNByOrderByCreatedAtDesc(int n);
+
     Article selectArticle(Long id);
 
-    Article updateArticle(Long id, String title, String content) throws Exception;
+    Article updateArticle(ArticleDto articleDto) throws Exception;
+
+    List<Article> searchTopNOrderByCreatedAtDesc(Pageable page, String keyword, int n);
 
     void deleteArticle(Long id) throws Exception;
 }

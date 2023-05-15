@@ -3,11 +3,11 @@ package jscode.controller;
 import jscode.domain.dto.ArticleDto;
 import jscode.service.ArticleService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
@@ -27,6 +27,16 @@ public class ArticleController {
         return ResponseEntity.status(HttpStatus.OK).body(articleService.getAllArticles());
     }
 
+    @GetMapping("/sortedAll")
+    public ResponseEntity<List<ArticleDto>> getSortedAllArticles() {
+        return ResponseEntity.status(HttpStatus.OK).body(articleService.getSortedAllArticles());
+    }
+
+    @GetMapping("/search-title")
+    public ResponseEntity<List<ArticleDto>> searchArticles(Pageable page, @RequestParam String keyword) {
+        return ResponseEntity.status(HttpStatus.OK).body(articleService.searchArticles(page,keyword));
+    }
+
     @PostMapping()
     public ResponseEntity<ArticleDto> createArticle(@RequestBody ArticleDto articleDto) {
         return ResponseEntity.status(HttpStatus.OK).body(articleService.saveArticle(articleDto));
@@ -34,7 +44,7 @@ public class ArticleController {
 
     @PostMapping("/change")
     public ResponseEntity<ArticleDto> changeArticle(@RequestBody ArticleDto articleDto) throws Exception {
-        return ResponseEntity.status(HttpStatus.OK).body(articleService.updateArticle(articleDto.getId(),articleDto.getTitle(),articleDto.getContent()));
+        return ResponseEntity.status(HttpStatus.OK).body(articleService.updateArticle(articleDto));
     }
 
     @DeleteMapping()
