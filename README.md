@@ -2,10 +2,11 @@
 프로젝트 클래스 김태헌 repository
 
 ### ✅ IDE 세팅
-- **Spring Boot ** : IntelliJ
+- **Spring Boot**
+- **IntelliJ**
 
 ### ✅ 프로젝트 생성
-- **Spring Boot 개발자** : spring initializr를 활용해서 아래 의존성들을 포함시켜서 프로젝트를 생성
+- **Spring Boot** : spring initializr를 활용해서 아래 의존성들을 포함시켜서 프로젝트를 생성
     - `Spring Web`
     - `Spring Data JPA`
     - `mysql-connector-java`
@@ -14,7 +15,7 @@
     - `spring-boot-2.7.11`
     
 ### ✅ 데이터베이스 세팅
-    - MySQL
+-   `MySQL`
     
 ## Day 1    
 ### ✅ 학습 목표
