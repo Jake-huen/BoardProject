@@ -32,6 +32,11 @@ public class ArticleController {
         return ResponseEntity.status(HttpStatus.OK).body(articleService.getSortedAllArticles());
     }
 
+    @GetMapping("/search")
+    public ResponseEntity<List<ArticleDto>> searchArticles(@RequestParam String keyword) {
+        return ResponseEntity.status(HttpStatus.OK).body(articleService.searchArticles(keyword));
+    }
+
     @PostMapping()
     public ResponseEntity<ArticleDto> createArticle(@RequestBody ArticleDto articleDto) {
         return ResponseEntity.status(HttpStatus.OK).body(articleService.saveArticle(articleDto));

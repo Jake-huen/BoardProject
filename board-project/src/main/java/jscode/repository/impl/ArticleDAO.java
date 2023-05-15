@@ -16,5 +16,7 @@ public interface ArticleDAO {
 
     Article updateArticle(ArticleDto articleDto) throws Exception;
 
+    List<Article> searchTopNOrderByCreatedAtDesc(String keyword, int n);
+
     void deleteArticle(Long id) throws Exception;
 }
