@@ -5,7 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
-@Getter @Setter
+@Getter
 @RequiredArgsConstructor
 public class ArticleDto {
     private final Long id;

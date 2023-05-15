@@ -44,15 +44,14 @@ public class ArticleDAOImpl implements ArticleDAO {
             if (content == null) {
                 content = selectedArticle.get().getContent();
             }
-            Article article = Article.builder()
+            updatedArticle = Article.builder()
+                    .id(selectedArticle.get().getId())
                     .title(title)
                     .content(content).build();
-            updatedArticle = articleRepository.save(article);
+            return articleRepository.save(updatedArticle);
         } else {
             throw new Exception();
         }
-
-        return updatedArticle;
     }
 
     @Override

@@ -1,5 +1,6 @@
 package jscode.domain;
 
+import jscode.domain.dto.ArticleDto;
 import lombok.*;
 
 import javax.persistence.*;
@@ -7,7 +8,7 @@ import javax.persistence.*;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Article {
+public class Article extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,7 +21,8 @@ public class Article {
     private String content;
 
     @Builder
-    public Article(String title, String content) {
+    public Article(Long id,String title, String content) {
+        this.id = id;
         this.title = title;
         this.content = content;
     }
