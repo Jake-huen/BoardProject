@@ -2,6 +2,7 @@ package jscode.repository;
 
 import jscode.domain.Article;
 import jscode.domain.dto.ArticleDto;
+import jscode.exception.ArticleNotFoundException;
 import jscode.repository.impl.ArticleDAO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -67,7 +68,7 @@ public class ArticleDAOImpl implements ArticleDAO {
                     .build();
             return articleRepository.save(updatedArticle);
         } else {
-            throw new Exception();
+            throw new ArticleNotFoundException("게시글을 찾을 수 없습니다");
         }
     }
 
@@ -83,8 +84,8 @@ public class ArticleDAOImpl implements ArticleDAO {
         if (selectedArticle.isPresent()) {
             Article article = selectedArticle.get();
             articleRepository.delete(article);
-        }else {
-            throw new Exception();
+        } else {
+            throw new ArticleNotFoundException("게시글을 찾을 수 없습니다");
         }
     }
 }
