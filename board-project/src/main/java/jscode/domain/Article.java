@@ -8,6 +8,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Entity
 @Getter
@@ -39,6 +40,11 @@ public class Article extends BaseEntity {
         this.content = content;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+    }
+    public void update(ArticleDto articleDto){
+        this.title = articleDto.getTitle();
+        this.content = articleDto.getContent();
+        this.updatedAt = LocalDateTime.now();
     }
 
 }
