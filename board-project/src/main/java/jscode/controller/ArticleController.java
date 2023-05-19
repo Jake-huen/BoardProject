@@ -6,8 +6,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @RestController
@@ -18,38 +23,45 @@ public class ArticleController {
     private final ArticleService articleService;
 
     @GetMapping()
-    public ResponseEntity<ArticleDto> getArticle(Long id) {
-        return ResponseEntity.status(HttpStatus.OK).body(articleService.getArticle(id));
+    @ResponseStatus(HttpStatus.OK)
+    public ArticleDto getArticle(Long id) {
+        return articleService.getArticle(id);
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<ArticleDto>> getAllArticles() {
-        return ResponseEntity.status(HttpStatus.OK).body(articleService.getAllArticles());
+    @ResponseStatus(HttpStatus.OK)
+    public List<ArticleDto> getAllArticles() {
+        return articleService.getAllArticles();
     }
 
     @GetMapping("/sortedAll")
-    public ResponseEntity<List<ArticleDto>> getSortedAllArticles() {
-        return ResponseEntity.status(HttpStatus.OK).body(articleService.getSortedAllArticles());
+    @ResponseStatus(HttpStatus.OK)
+    public List<ArticleDto> getSortedAllArticles() {
+        return articleService.getSortedAllArticles();
     }
 
     @GetMapping("/search-title")
-    public ResponseEntity<List<ArticleDto>> searchArticles(Pageable page, @RequestParam String keyword) {
-        return ResponseEntity.status(HttpStatus.OK).body(articleService.searchArticles(page,keyword));
+    @ResponseStatus(HttpStatus.OK)
+    public List<ArticleDto> searchArticles(Pageable page, @RequestParam String keyword) {
+        return articleService.searchArticles(page, keyword);
     }
 
     @PostMapping()
-    public ResponseEntity<ArticleDto> createArticle(@RequestBody ArticleDto articleDto) {
-        return ResponseEntity.status(HttpStatus.OK).body(articleService.saveArticle(articleDto));
+    @ResponseStatus(HttpStatus.CREATED)
+    public ArticleDto createArticle(@Valid @RequestBody ArticleDto articleDto) {
+        return articleService.saveArticle(articleDto);
     }
 
     @PostMapping("/change")
-    public ResponseEntity<ArticleDto> changeArticle(@RequestBody ArticleDto articleDto) throws Exception {
-        return ResponseEntity.status(HttpStatus.OK).body(articleService.updateArticle(articleDto));
+    @ResponseStatus(HttpStatus.OK)
+    public ArticleDto changeArticle(@Valid @RequestBody ArticleDto articleDto) {
+        return articleService.updateArticle(articleDto);
     }
 
     @DeleteMapping()
-    public ResponseEntity<String> deleteArticle(Long id) throws Exception {
+    @ResponseStatus(HttpStatus.OK)
+    public String deleteArticle(Long id) throws RuntimeException {
         articleService.deleteArticle(id);
-        return ResponseEntity.status(HttpStatus.OK).body("정상적으로 삭제되었습니다.");
+        return "정상적으로 삭제되었습니다.";
     }
 }

@@ -16,9 +16,9 @@ public interface ArticleDAO {
 
     Article selectArticle(Long id);
 
-    Article updateArticle(ArticleDto articleDto) throws Exception;
+    Article updateArticle(ArticleDto articleDto) throws RuntimeException;
 
     List<Article> searchTopNOrderByCreatedAtDesc(Pageable page, String keyword, int n);
 
-    void deleteArticle(Long id) throws Exception;
+    void deleteArticle(Long id) throws RuntimeException;
 }

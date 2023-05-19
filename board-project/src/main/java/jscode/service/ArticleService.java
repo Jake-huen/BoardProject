@@ -4,9 +4,10 @@ import jscode.domain.Article;
 import jscode.domain.dto.ArticleDto;
 import jscode.repository.ArticleDAOImpl;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,21 +51,26 @@ public class ArticleService {
     }
 
     // 게시글 수정
-    public ArticleDto updateArticle(ArticleDto articleDto) throws Exception {
+    @Transactional
+    public ArticleDto updateArticle(ArticleDto articleDto) {
         Article selectedArticle = articleDAO.updateArticle(articleDto);
         return new ArticleDto(selectedArticle.getId(), selectedArticle.getTitle(), selectedArticle.getContent(), selectedArticle.getCreatedAt(), selectedArticle.getUpdatedAt());
     }
 
     // 게시글 검색
     public List<ArticleDto> searchArticles(Pageable page, String keyword) {
-        List<Article> articles = articleDAO.searchTopNOrderByCreatedAtDesc(page, keyword,100);
-        List<ArticleDto> articleDtos = new ArrayList<>();
-        articles.stream().forEach(article -> articleDtos.add(new ArticleDto(article.getId(), article.getTitle(), article.getContent(), article.getCreatedAt(), article.getUpdatedAt())));
-        return articleDtos;
+        if (keyword.isBlank()) {
+            throw new RuntimeException("키워드는 한 글자 이상이여야 합니다");
+        } else {
+            List<Article> articles = articleDAO.searchTopNOrderByCreatedAtDesc(page, keyword, 100);
+            List<ArticleDto> articleDtos = new ArrayList<>();
+            articles.stream().forEach(article -> articleDtos.add(new ArticleDto(article.getId(), article.getTitle(), article.getContent(), article.getCreatedAt(), article.getUpdatedAt())));
+            return articleDtos;
+        }
     }
 
     // 게시글 삭제
-    public void deleteArticle(Long id) throws Exception {
+    public void deleteArticle(Long id) throws RuntimeException {
         articleDAO.deleteArticle(id);
     }
 }
