@@ -2,17 +2,17 @@ package jscode.repository;
 
 import jscode.domain.Article;
 import jscode.domain.dto.ArticleDto;
-import jscode.exception.ArticleNotFoundException;
 import jscode.repository.impl.ArticleDAO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Component;
 
-import javax.swing.text.html.Option;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
@@ -48,44 +48,26 @@ public class ArticleDAOImpl implements ArticleDAO {
     }
 
     @Override
-    public Article updateArticle(ArticleDto articleDto) throws Exception {
+    public Article updateArticle(ArticleDto articleDto) throws RuntimeException {
         Optional<Article> selectedArticle = articleRepository.findById(articleDto.getId());
-        if (selectedArticle.isPresent()) {
-            String title = selectedArticle.get().getTitle();
-            String content = selectedArticle.get().getContent();
-            if(articleDto.getTitle()!=null){
-                title = articleDto.getTitle();
-            }
-            if (articleDto.getContent() != null) {
-                content = articleDto.getContent();
-            }
-            Article updatedArticle = Article.builder()
-                    .id(selectedArticle.get().getId())
-                    .title(title)
-                    .content(content)
-                    .createdAt(selectedArticle.get().getCreatedAt())
-                    .updatedAt(articleDto.getUpdatedAt())
-                    .build();
-            return articleRepository.save(updatedArticle);
-        } else {
-            throw new ArticleNotFoundException("게시글을 찾을 수 없습니다");
-        }
+        selectedArticle.get().update(articleDto);
+        return articleRepository.save(selectedArticle.get());
     }
 
     @Override
     public List<Article> searchTopNOrderByCreatedAtDesc(Pageable page, String keyword, int n) {
         Pageable pageable = PageRequest.of(page.getPageNumber(), n, Sort.by("createdAt").descending());
-        return articleRepository.findByTitleContainingOrderByCreatedAtDesc(keyword, pageable);
+        return articleRepository.findArticleByTitleContaining(keyword, pageable);
     }
 
     @Override
-    public void deleteArticle(Long id) throws Exception {
+    public void deleteArticle(Long id) throws RuntimeException {
         Optional<Article> selectedArticle = articleRepository.findById(id);
         if (selectedArticle.isPresent()) {
             Article article = selectedArticle.get();
             articleRepository.delete(article);
         } else {
-            throw new ArticleNotFoundException("게시글을 찾을 수 없습니다");
+            throw new RuntimeException("게시글을 찾을 수 없습니다");
         }
     }
 }

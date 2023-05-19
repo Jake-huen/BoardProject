@@ -13,12 +13,15 @@ import java.time.LocalDateTime;
 public class ArticleDto {
 
     private final Long id;
-    @NotNull
+
+    @NotBlank(message = "게시글 제목 조건 오류")
     @Size(min = 1, max = 15)
     private final String title;
-    @NotBlank
+
+    @NotBlank(message = "게시글 내용 조건 오류")
     @Size(min = 1, max = 1000)
     private final String content;
+
     private final LocalDateTime createdAt;
     private final LocalDateTime updatedAt;
 }
