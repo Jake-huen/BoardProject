@@ -17,8 +17,8 @@ import java.util.Map;
 public class CustomExceptionHandler {
 
     // runtimeException
-    @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<Map<String, String>> handleRuntimeException(RuntimeException e) {
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<Map<String, String>> handleRuntimeException(Exception e) {
         HttpHeaders responseHeaders = new HttpHeaders();
         HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
         return getMapResponseEntity(responseHeaders, httpStatus, "[" + e.getMessage() + "]", "400");
