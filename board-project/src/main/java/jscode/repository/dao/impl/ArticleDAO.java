@@ -1,7 +1,7 @@
-package jscode.repository.impl;
+package jscode.repository.dao.impl;
 
 import jscode.domain.Article;
-import jscode.domain.dto.ArticleDto;
+import jscode.dto.ArticleDto;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;

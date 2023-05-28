@@ -1,18 +1,16 @@
-package jscode.repository;
+package jscode.repository.dao;
 
+import jscode.repository.dao.impl.ArticleDAO;
 import jscode.domain.Article;
-import jscode.domain.dto.ArticleDto;
-import jscode.repository.impl.ArticleDAO;
+import jscode.dto.ArticleDto;
+import jscode.repository.ArticleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 

@@ -1,5 +1,5 @@
-server:
-  port: 5000
+#server:
+#  port: 5000
 spring:
   jpa:
     open-in-view: false
@@ -10,6 +10,9 @@ spring:
       hibernate.format_sql: true
     database-platform: org.hibernate.dialect.MySQL5Dialect
   profiles:
-    include: aws # 배포용 설정
-    # includ: secure # 로컬용 설정
+    # include: aws # 배포용 설정
+    include: secure # 로컬용 설정
   sql.init.mode: always
+jwt:
+  secret: VlwEyVBsYt9V7zq57TejMnVUyzblYcfPQye08f7MGVA9XkHa
+
