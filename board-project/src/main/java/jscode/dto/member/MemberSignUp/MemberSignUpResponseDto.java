@@ -1,15 +1,17 @@
 package jscode.dto.member.MemberSignUp;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Builder;
+import lombok.Data;
 
 import java.time.LocalDateTime;
 
-@Getter
+@Builder
+@Data
 @AllArgsConstructor
 public class MemberSignUpResponseDto {
 
     private Long id;
     private String email;
-    private LocalDateTime localDateTime;
+    private LocalDateTime createdTime;
 }

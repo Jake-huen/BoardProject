@@ -1,9 +1,11 @@
 package jscode.dto.member.MemberLogin;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Builder;
+import lombok.Data;
 
-@Getter
+@Builder
+@Data
 @AllArgsConstructor
 public class MemberLoginResponseDto {
     private String email;

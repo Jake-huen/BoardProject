@@ -11,8 +11,8 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/article")
 @RequiredArgsConstructor
+@RequestMapping("/article")
 public class ArticleController {
 
     private final ArticleService articleService;

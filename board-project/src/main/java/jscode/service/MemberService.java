@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 
 @Service
 @Transactional(readOnly = true)
@@ -44,6 +45,7 @@ public class MemberService {
         return new MemberLoginResponseDto(email, tokenInfo.getGrantType(), tokenInfo.getAccessToken(), tokenInfo.getRefreshToken());
     }
 
+    @Transactional
     public MemberSignUpResponseDto signup(String email, String password) {
         // 1. 중복된 이메일 체크
         if (memberRepository.findByEmail(email).isPresent()) {
@@ -53,7 +55,8 @@ public class MemberService {
         // 2. 회원 생성
         Member member = Member.builder()
                 .email(email)
-                .password(passwordEncoder.encode(password))
+                .password(password)
+                .roles(Arrays.asList("USER"))
                 .createdAt(LocalDateTime.now())
                 .updatedAt(LocalDateTime.now())
                 .build();

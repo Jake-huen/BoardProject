@@ -23,7 +23,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 @Entity
 public class Member extends BaseEntity implements UserDetails {
     @Id @Column(updatable = false, unique = true, nullable = false, length = 250)
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false, length = 100)
