@@ -12,7 +12,8 @@ import javax.validation.constraints.Size;
 public class MemberSignUpRequestDto {
 
     //@Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,15}$")
-    @Email
+    @Email(message = "이메일 형식이 틀렸습니다")
+    @NotBlank(message = "이메일을 입력해주세요")
     private String email;
 
     @NotBlank(message = "패스워드를 입력해주세요")
