@@ -40,6 +40,7 @@ public class Article extends BaseEntity {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
+
     public void update(ArticleDto articleDto){
         this.title = articleDto.getTitle();
         this.content = articleDto.getContent();

@@ -1,5 +1,8 @@
 package jscode.exception;
 
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.UnsupportedJwtException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -8,6 +11,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.security.SignatureException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -15,6 +19,21 @@ import java.util.Map;
 
 @RestControllerAdvice
 public class CustomExceptionHandler {
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<String> handleException(Exception e) {
+        if (e instanceof SecurityException || e instanceof MalformedJwtException) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("유효하지 않은 토큰입니다");
+        } else if (e instanceof ExpiredJwtException) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("만료된 토큰입니다");
+        } else if (e instanceof UnsupportedJwtException) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("지원되지 않는 토큰입니다");
+        } else if (e instanceof IllegalArgumentException) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } else {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred");
+        }
+    }
 
     // runtimeException
     @ExceptionHandler(RuntimeException.class)

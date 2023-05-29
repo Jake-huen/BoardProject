@@ -1,6 +1,9 @@
 package jscode.controller;
 
-import jscode.dto.MemberLoginRequestDto;
+import jscode.dto.member.MemberLogin.MemberLoginResponseDto;
+import jscode.dto.member.MemberSignUp.MemberSignUpRequestDto;
+import jscode.dto.member.MemberLogin.MemberLoginRequestDto;
+import jscode.dto.member.MemberSignUp.MemberSignUpResponseDto;
 import jscode.dto.security.TokenInfo;
 import jscode.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -18,10 +23,16 @@ public class MemberController {
     private final MemberService memberService;
 
     @PostMapping("/login")
-    public TokenInfo login(@RequestBody MemberLoginRequestDto memberLoginRequestDto) {
-        String memberId = memberLoginRequestDto.getMemberId();
+    public MemberLoginResponseDto login(@RequestBody MemberLoginRequestDto memberLoginRequestDto) {
+        String email = memberLoginRequestDto.getEmail();
         String password = memberLoginRequestDto.getPassword();
-        TokenInfo tokenInfo = memberService.login(memberId, password);
-        return tokenInfo;
+        return memberService.login(email, password);
+    }
+
+    @PostMapping("/signup")
+    public MemberSignUpResponseDto signup(@Valid @RequestBody MemberSignUpRequestDto memberSignUpRequestDto) {
+        String email = memberSignUpRequestDto.getEmail();
+        String password = memberSignUpRequestDto.getPassword();
+        return memberService.signup(email, password);
     }
 }

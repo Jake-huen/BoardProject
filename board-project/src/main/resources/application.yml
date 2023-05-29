@@ -13,6 +13,5 @@ spring:
     # include: aws # 배포용 설정
     include: secure # 로컬용 설정
   sql.init.mode: always
-jwt:
-  secret: VlwEyVBsYt9V7zq57TejMnVUyzblYcfPQye08f7MGVA9XkHa
+
 
