@@ -8,9 +8,11 @@ import jscode.dto.security.TokenInfo;
 import jscode.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 @RestController
@@ -34,4 +36,11 @@ public class MemberController {
         String password = memberSignUpRequestDto.getPassword();
         return memberService.signup(email, password);
     }
+
+    @GetMapping("/check")
+    @ResponseStatus(HttpStatus.OK)
+    public MemberSignUpResponseDto checkMember(HttpServletRequest request) {
+        return memberService.checkMember(request);
+    }
+
 }

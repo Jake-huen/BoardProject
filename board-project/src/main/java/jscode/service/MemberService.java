@@ -11,13 +11,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -27,7 +28,7 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final JwtTokenProvider jwtTokenProvider;
-    private final PasswordEncoder passwordEncoder;
+    // private final PasswordEncoder passwordEncoder;
 
     @Transactional
     public MemberLoginResponseDto login(String email, String password) {
@@ -47,12 +48,10 @@ public class MemberService {
 
     @Transactional
     public MemberSignUpResponseDto signup(String email, String password) {
-        // 1. 중복된 이메일 체크
+        // 중복된 이메일 체크
         if (memberRepository.findByEmail(email).isPresent()) {
             throw new RuntimeException("중복된 이메일이 존재합니다");
         }
-
-        // 2. 회원 생성
         Member member = Member.builder()
                 .email(email)
                 .password(password)
@@ -60,14 +59,29 @@ public class MemberService {
                 .createdAt(LocalDateTime.now())
                 .updatedAt(LocalDateTime.now())
                 .build();
-
-
-        // 3. 회원 저장
         Member savedMember = memberRepository.save(member);
-
-        // 4. 회원가입 응답 생성
         MemberSignUpResponseDto responseDto = new MemberSignUpResponseDto(savedMember.getId(), savedMember.getEmail(), savedMember.getCreatedAt());
-
         return responseDto;
+    }
+
+    public MemberSignUpResponseDto checkMember(HttpServletRequest request) {
+        String token = jwtTokenProvider.resolveToken(request);
+        token = jwtTokenProvider.getToken(token);
+
+        String email = jwtTokenProvider.getEmail(token);
+        Optional<Member> member = memberRepository.findByEmail(email);
+        if(member.isPresent()){
+            MemberSignUpResponseDto memberSignUpResponseDto = MemberSignUpResponseDto.builder()
+                    .id(member.get().getId())
+                    .email(member.get().getEmail())
+                    .createdTime(member.get().getCreatedAt())
+                    .build();
+            return memberSignUpResponseDto;
+        }else{
+            throw new RuntimeException("존재하지 않는 이메일입니다.");
+        }
+
+
+
     }
 }
