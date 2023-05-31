@@ -1,8 +1,8 @@
 package jscode.service;
 
 import jscode.domain.Article;
-import jscode.domain.dto.ArticleDto;
-import jscode.repository.ArticleDAOImpl;
+import jscode.dto.ArticleDto;
+import jscode.repository.dao.ArticleDAOImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;

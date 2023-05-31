@@ -4,7 +4,13 @@ build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
+
+### Yaml 파일 ###
 **/application-secure.yml
+**/application-aws.yml
+
+**/data.sql
+
 ### STS ###
 .apt_generated
 .classpath
