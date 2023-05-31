@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 @Builder
@@ -11,8 +12,8 @@ import javax.validation.constraints.Size;
 @AllArgsConstructor
 public class MemberSignUpRequestDto {
 
-    //@Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,15}$")
     @Email(message = "이메일 형식이 틀렸습니다")
+    @Pattern(regexp = "\\S+", message = "이메일에 공백이 없어야 합니다.")
     @NotBlank(message = "이메일을 입력해주세요")
     private String email;
 

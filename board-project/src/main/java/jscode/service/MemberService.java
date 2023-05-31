@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.swing.text.html.Option;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Optional;
@@ -28,7 +29,6 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final JwtTokenProvider jwtTokenProvider;
-    // private final PasswordEncoder passwordEncoder;
 
     @Transactional
     public MemberLoginResponseDto login(String email, String password) {
@@ -40,8 +40,10 @@ public class MemberService {
         // authenticate 매서드가 실행될 때 CustomUserDetailsService 에서 만든 loadUserByUsername 메서드가 실행
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 
-        // 3. 인증 정보를 기반으로 JWT 토큰 생성
-        TokenInfo tokenInfo = jwtTokenProvider.generateToken(authentication);
+        // 3. JWT 토큰 생성
+        System.out.println("authentication = " + authentication);
+        Optional<Member> member = memberRepository.findByEmail(email);
+        TokenInfo tokenInfo = jwtTokenProvider.generateToken(member.get());
 
         return new MemberLoginResponseDto(email, tokenInfo.getGrantType(), tokenInfo.getAccessToken(), tokenInfo.getRefreshToken());
     }
@@ -55,7 +57,6 @@ public class MemberService {
         Member member = Member.builder()
                 .email(email)
                 .password(password)
-                .roles(Arrays.asList("USER"))
                 .createdAt(LocalDateTime.now())
                 .updatedAt(LocalDateTime.now())
                 .build();
@@ -67,7 +68,6 @@ public class MemberService {
     public MemberSignUpResponseDto checkMember(HttpServletRequest request) {
         String token = jwtTokenProvider.resolveToken(request);
         token = jwtTokenProvider.getToken(token);
-
         String email = jwtTokenProvider.getEmail(token);
         Optional<Member> member = memberRepository.findByEmail(email);
         if(member.isPresent()){

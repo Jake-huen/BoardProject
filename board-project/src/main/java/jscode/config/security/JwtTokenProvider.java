@@ -3,6 +3,7 @@ package jscode.config.security;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import jscode.domain.Member;
 import jscode.dto.security.TokenInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,9 +16,11 @@ import org.springframework.stereotype.Component;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import javax.servlet.http.HttpServletRequest;
+import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.stream.Collectors;
 
@@ -26,34 +29,34 @@ import java.util.stream.Collectors;
 public class JwtTokenProvider {
 
     private final Key key;
+
     @Value("${jwt.secret}")
-    String secretKey;
+    String salt;
+
+    private final long at_exp = 1000L * 60 * 30;
+    private final long rt_exp = 1000L & 60 * 60;
     // secret key를 가지고 key값 저장
-    public JwtTokenProvider(@Value("${jwt.secret}") String secretKey) {
-        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
-        this.key = Keys.hmacShaKeyFor(keyBytes);
+    public JwtTokenProvider(@Value("${jwt.secret}") String salt) {
+        this.key = Keys.hmacShaKeyFor(salt.getBytes(StandardCharsets.UTF_8));
     }
 
     // 토큰 생성
-    public TokenInfo generateToken(Authentication authentication) {
-        // 권한 가져오기
-        String authorities = authentication.getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority)
-                .collect(Collectors.joining(","));
-
+    public TokenInfo generateToken(Member member) {
         // Access Token 생성
+        Claims claims = Jwts.claims().setSubject(member.getEmail());
+        claims.put("memberId", member.getId());
+
         long now = (new Date()).getTime();
-        Date accessTokenExpiresIn = new Date(now + 86400000);
+        Date accessTokenExpiresIn = new Date(now + at_exp);
         String accessToken = Jwts.builder()
-                .setSubject(authentication.getName())
-                .claim("auth", authorities)
+                .setClaims(claims)
                 .setExpiration(accessTokenExpiresIn)
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
 
         // Refresh Token 생성
         String refreshToken = Jwts.builder()
-                .setExpiration(new Date(now + 86400000))
+                .setExpiration(new Date(now + rt_exp))
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
 
@@ -69,19 +72,9 @@ public class JwtTokenProvider {
         // 토큰 복호화
         Claims claims = parseClaims(accessToken);
 
-        if (claims.get("auth") == null) {
-            throw new RuntimeException("권한 정보가 없는 토큰입니다.");
-        }
-
-        // 클레임에서 권한 정보 가져오기
-        Collection<? extends GrantedAuthority> authorities =
-                Arrays.stream(claims.get("auth").toString().split(","))
-                        .map(SimpleGrantedAuthority::new)
-                        .collect(Collectors.toList());
-
         // UserDetails 객체를 만들어서 Authentication 리턴
-        UserDetails principal = new User(claims.getSubject(), "", authorities);
-        return new UsernamePasswordAuthenticationToken(principal, "", authorities);
+        UserDetails principal = new User(claims.getSubject(), "", Collections.emptyList());
+        return new UsernamePasswordAuthenticationToken(principal, "", Collections.emptyList());
     }
 
     // 토큰 정보를 검증하는 메서드
@@ -105,12 +98,12 @@ public class JwtTokenProvider {
 
     // Bearer 제외부분
     public String getToken(String token) {
-        token = token.split(" ")[1].trim();
+        token = token.substring(7).trim();
         return token;
     }
 
     public String getEmail(String token) {
-        return Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(token).getBody().getSubject();
+        return Jwts.parserBuilder().setSigningKey(salt.getBytes()).build().parseClaimsJws(token).getBody().getSubject();
     }
 
     public String resolveToken(HttpServletRequest request) {

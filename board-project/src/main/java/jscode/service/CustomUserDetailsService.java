@@ -10,6 +10,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
+import java.util.Collections;
+
 @Service
 @RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
@@ -18,8 +21,8 @@ public class CustomUserDetailsService implements UserDetailsService {
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws RuntimeException {
-        return memberRepository.findByEmail(username)
+    public UserDetails loadUserByUsername(String email) throws RuntimeException {
+        return memberRepository.findByEmail(email)
                 .map(this::createUserDetails)
                 .orElseThrow(() -> new RuntimeException("해당하는 유저를 찾을 수 없습니다."));
     }
@@ -28,8 +31,8 @@ public class CustomUserDetailsService implements UserDetailsService {
     private UserDetails createUserDetails(Member member) {
         return User.builder()
                 .username(member.getEmail())
+                .authorities(Collections.emptyList())
                 .password(passwordEncoder.encode(member.getPassword()))
-                .roles(member.getRoles().toArray(new String[0]))
                 .build();
     }
 }
