@@ -1,90 +1,55 @@
-# project-class-kimtaeheon
-프로젝트 클래스 김태헌 repository
+# Board-Server
 
-### ✅ IDE 세팅
-- **Spring Boot**
-- **IntelliJ**
+단계별로 진행하는 게시판 서비스 고도화 👉 http://board-project.ap-northeast-2.elasticbeanstalk.com/
 
-### ✅ 프로젝트 생성
-- **Spring Boot** : spring initializr를 활용해서 아래 의존성들을 포함시켜서 프로젝트를 생성
-    - `Spring Web`
-    - `Spring Data JPA`
-    - `mysql-connector-java`
-    - `lombok`
-    - `java11`
-    - `spring-boot-2.7.11`
-    
-### ✅ 데이터베이스 세팅
--   `MySQL`
-    
-## Day 1    
-### ✅ 학습 목표
+📖 Description
+단계별로 게시판 서비스를 점차 발전시키는 서비스를 진행하였습니다.    
 
-- URL, Http Method를 활용한 기본 라우팅 방법 학습
-- Request Body, Query Params, Path Params 사용해보기
-- ORM 사용
-    - 엔티티(테이블) 생성
-    - 기본적인 CRUD 활용
-- 요청부터 응답까지 전체 과정 경험
-- REST API 설계
-- HTTP Status Code (상태 코드)
-- Postman 사용법
+⭐ Main Feature
+- 게시글 생성, 조회, 수정, 정렬, 검색, 삭제
+- (게시글 댓글)
+- 회원가입 및 로그인
+- JWT 이용
+- ElasticBeanStalk 배포
+- (S3 이미지 업로드)
 
-### ✅ 요구 사항
+🔧 Stack
+Language: Java
+Library & Framework : SpringBoot
+Database : AWS RDS (MySQL)
+ORM : Spring JPA
+Deploy: AWS ElasticBeanStalk
 
-1. **게시글 작성 기능**
-- 게시글은 `제목`, `내용`을 포함한다.
-- 게시글이 저장될 때, `id`(PK, primary key)도 같이 Auto-increment 형식으로 저장돼야 한다.
-- 게시글 작성에 성공했을 때, 응답값으로 작성된 게시글에 대한 정보를 보여주어야 한다.
+📂 Project Structure
+src
+└── main
+    ├── config
+        ├── SecurityConfig
+        └── Jwt
+    ├── controller
+        ├── ArticleController
+        └── MemberController
+    ├── domain
+        └── Article
+        └── ArticleComment
+        └── Member
+    ├── dto
+        └──Member
+        └──Article
+    ├── repository
+        └──
+    └── exception
+└── test
 
-2. **게시글 전체 조회 기능**
-- 게시글을 조회할 때 `id`, `제목`, `내용`의 값이 포함돼야 한다.
+🔨 Server Architecture
 
-3. **특정 게시글 조회 기능**
-- 게시글의 `id`(PK, primary key)로 특정 게시글을 조회한다.
-- 게시글을 조회할 때 `id`, `제목`, `내용`의 값이 포함돼야 한다.
+⚒ CI/CD
 
-4. **특정 게시글 수정 기능**
-- 게시글의 `id`(PK, primary key)로 특정 게시글을 수정할 수 있어야 한다.
-- 게시글의 `제목`, `내용`을 수정할 수 있다.
-- 게시글 수정에 성공했을 때, 응답값으로 수정된 게시글에 대한 정보를 보여주어야 한다.
+👨‍💻 Role & Contribution
+- 백엔드 서버(김태헌)
 
-5. **특정 게시글 삭제 기능**
-- 게시글의 `id`(PK, primary key)로 특정 게시글을 삭제할 수 있어야 한다.
+회고
+https://jobdong7757.tistory.com/207
 
-## Day 2
-
-### ✅ 학습 목표
-
-- 정렬 기능
-- 검색 기능
-- 데이터 조회 시 `limit` 걸기
-- `createdAt` 컬럼 배우기
-
-### ✅ 요구 사항
-
-1. **게시글 작성 기능**
-- 게시글에 `생성 시간`도 같이 저장한다.
-
-2. **게시글 전체 조회 기능**
-- 게시글을 조회할 때 `생성 시간`의 값도 포함돼야 한다.
-- 최근에 작성된 순으로 게시글이 조회되어야 한다.
-- 데이터 조회 개수는 최대 100개까지만 할 수 있어야 한다.
-
-3. **특정 게시글 조회 기능**
-- 게시글을 조회할 때 `생성 시간`의 값도 포함돼야 한다.
-    
-    
-4. **특정 게시글 수정 기능**
-- (추가 요구사항 없음)
-
-5. **특정 게시글 삭제 기능**
-- (추가 요구사항 없음)
-
-6. **게시글 검색 기능**
-- `검색 키워드`로 게시글을 검색할 수 있어야 한다.
-- `검색 키워드`가 포함된 `제목`을 가진 게시글을 전부 조회한다.
-- 최근에 작성된 순으로 게시글이 조회되어야 한다.
-- 데이터 조회 개수는 최대 100개까지만 할 수 있어야 한다.
 
 
