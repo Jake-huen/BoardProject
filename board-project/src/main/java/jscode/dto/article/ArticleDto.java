@@ -1,4 +1,4 @@
-package jscode.dto;
+package jscode.dto.article;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

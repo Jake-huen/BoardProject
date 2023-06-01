@@ -1,6 +1,6 @@
 package jscode.controller;
 
-import jscode.dto.ArticleDto;
+import jscode.dto.article.ArticleDto;
 import jscode.service.ArticleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
