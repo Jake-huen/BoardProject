@@ -14,11 +14,11 @@
 - (S3 이미지 업로드)
 
 🔧 Stack
-Language: Java
-Library & Framework : SpringBoot
-Database : AWS RDS (MySQL)
-ORM : Spring JPA
-Deploy: AWS ElasticBeanStalk
+- Language: Java
+- Library & Framework : SpringBoot
+- Database : AWS RDS (MySQL)
+- ORM : Spring JPA
+- Deploy: AWS ElasticBeanStalk
 
 📂 Project Structure
 
