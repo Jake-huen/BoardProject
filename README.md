@@ -21,25 +21,6 @@ ORM : Spring JPA
 Deploy: AWS ElasticBeanStalk
 
 📂 Project Structure
-src
-└── main
-    ├── config
-        ├── SecurityConfig
-        └── Jwt
-    ├── controller
-        ├── ArticleController
-        └── MemberController
-    ├── domain
-        └── Article
-        └── ArticleComment
-        └── Member
-    ├── dto
-        └──Member
-        └──Article
-    ├── repository
-        └──
-    └── exception
-└── test
 
 🔨 Server Architecture
 
