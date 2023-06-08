@@ -53,4 +53,5 @@ public class Member extends BaseEntity {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
+
 }

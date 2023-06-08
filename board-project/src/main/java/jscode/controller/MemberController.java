@@ -1,14 +1,12 @@
 package jscode.controller;
 
+import jscode.dto.member.MemberDto;
 import jscode.dto.member.MemberLogin.MemberLoginResponseDto;
 import jscode.dto.member.MemberSignUp.MemberSignUpRequestDto;
 import jscode.dto.member.MemberLogin.MemberLoginRequestDto;
 import jscode.dto.member.MemberSignUp.MemberSignUpResponseDto;
-import jscode.dto.security.TokenInfo;
 import jscode.service.MemberService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,7 +37,7 @@ public class MemberController {
 
     @GetMapping("/check")
     @ResponseStatus(HttpStatus.OK)
-    public MemberSignUpResponseDto checkMember(HttpServletRequest request) {
+    public MemberDto checkMember(HttpServletRequest request) {
         return memberService.checkMember(request);
     }
 

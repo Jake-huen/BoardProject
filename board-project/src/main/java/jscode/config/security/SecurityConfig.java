@@ -42,12 +42,8 @@ public class SecurityConfig {
                 .exceptionHandling()
                 .authenticationEntryPoint(new AuthenticationEntryPoint() {
                     @Override
-                    public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException {
-                        // 인증문제가 발생했을 때 이 부분을 호출한다.
-                        response.setStatus(401);
-                        response.setCharacterEncoding("utf-8");
-                        response.setContentType("text/html; charset=UTF-8");
-                        response.getWriter().write("인증되지 않은 사용자입니다.");
+                    public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) {
+                        throw new RuntimeException("인증 문제가 발생하였습니다");
                     }
                 });
         return http.build();

@@ -1,6 +1,7 @@
 package jscode.domain;
 
 import jscode.dto.article.ArticleDto;
+import jscode.dto.member.MemberSignUp.MemberSignUpResponseDto;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
