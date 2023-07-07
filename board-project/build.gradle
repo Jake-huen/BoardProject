@@ -39,6 +39,7 @@ dependencies {
 
 	// thymeleaf 설정
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+	testImplementation 'junit:junit:4.13.1'
 
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'com.mysql:mysql-connector-j'
