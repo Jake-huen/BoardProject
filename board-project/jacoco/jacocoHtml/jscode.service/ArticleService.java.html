@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ko"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ArticleService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">demo</a> &gt; <a href="index.source.html" class="el_package">jscode.service</a> &gt; <span class="el_source">ArticleService.java</span></div><h1>ArticleService.java</h1><pre class="source lang-java linenums">package jscode.service;
+
+import jscode.domain.Article;
+import jscode.domain.Member;
+import jscode.dto.article.ArticleDto;
+import jscode.dto.member.MemberDto;
+import jscode.dto.member.MemberSignUp.MemberSignUpResponseDto;
+import jscode.repository.ArticleRepository;
+import jscode.repository.MemberRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Service;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+@Service
+<span class="fc" id="L24">@RequiredArgsConstructor</span>
+public class ArticleService {
+
+    private final ArticleRepository articleRepository;
+    private final MemberRepository memberRepository;
+    private final MemberService memberService;
+
+    // 게시글 저장
+    public ArticleDto saveArticle(HttpServletRequest request, ArticleDto articleDto) {
+<span class="nc" id="L33">        MemberDto memberDto = memberService.checkMember(request);</span>
+<span class="nc" id="L34">        Optional&lt;Member&gt; member = memberRepository.findByEmail(memberDto.getEmail());</span>
+<span class="nc" id="L35">        Article article = Article.builder()</span>
+<span class="nc" id="L36">                .member(member.get())</span>
+<span class="nc" id="L37">                .title(articleDto.getTitle())</span>
+<span class="nc" id="L38">                .content(articleDto.getContent())</span>
+<span class="nc" id="L39">                .build();</span>
+<span class="nc" id="L40">        Article savedArticle = articleRepository.save(article);</span>
+
+<span class="nc" id="L42">        return new ArticleDto(savedArticle.getId(), savedArticle.getTitle(), savedArticle.getContent(), member.get().getId(), savedArticle.getCreatedAt(), savedArticle.getUpdatedAt());</span>
+    }
+
+    // 게시글 가져오기
+    public ArticleDto getArticle(Long id) {
+<span class="fc" id="L47">        Article article = articleRepository.findById(id).get();</span>
+<span class="fc" id="L48">        return new ArticleDto(article.getId(), article.getTitle(), article.getContent(), article.getMember().getId(), article.getCreatedAt(), article.getUpdatedAt());</span>
+    }
+
+    // 모든 게시글 id 순서로 가져오기
+    public List&lt;ArticleDto&gt; getAllArticles() {
+<span class="fc" id="L53">        List&lt;Article&gt; articles = articleRepository.findAll();</span>
+<span class="fc" id="L54">        List&lt;ArticleDto&gt; articleDtos = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L55">        articles.stream().forEach(article -&gt; articleDtos.add(new ArticleDto(article.getId(), article.getTitle(), article.getContent(), null, article.getCreatedAt(), article.getUpdatedAt())));</span>
+<span class="fc" id="L56">        return articleDtos;</span>
+    }
+
+    // 모든 게시글 최신순 100개까지 가져오기
+    public List&lt;ArticleDto&gt; getSortedAllArticles() {
+<span class="fc" id="L61">        Pageable pageable = PageRequest.of(0, 100, Sort.by(&quot;createdAt&quot;).descending());</span>
+<span class="fc" id="L62">        Page&lt;Article&gt; page = articleRepository.findAll(pageable);</span>
+<span class="fc" id="L63">        List&lt;Article&gt; articles = page.getContent();</span>
+<span class="fc" id="L64">        List&lt;ArticleDto&gt; articleDtos = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L65">        articles.stream().forEach(article -&gt; articleDtos.add(new ArticleDto(article.getId(), article.getTitle(), article.getContent(), null, article.getCreatedAt(), article.getUpdatedAt())));</span>
+<span class="fc" id="L66">        return articleDtos;</span>
+    }
+
+    // 게시글 수정
+    @Transactional
+    public ArticleDto updateArticle(HttpServletRequest request, ArticleDto articleDto) {
+<span class="nc" id="L72">        MemberDto memberDto = memberService.checkMember(request);</span>
+<span class="nc" id="L73">        Optional&lt;Article&gt; article = articleRepository.findById(articleDto.getId());</span>
+<span class="nc" id="L74">        article.get().update(articleDto);</span>
+<span class="nc" id="L75">        Article selectedArticle = articleRepository.save(article.get());</span>
+<span class="nc" id="L76">        return new ArticleDto(selectedArticle.getId(), selectedArticle.getTitle(), selectedArticle.getContent(), null, selectedArticle.getCreatedAt(), selectedArticle.getUpdatedAt());</span>
+    }
+
+    // 게시글 검색
+    public List&lt;ArticleDto&gt; searchArticles(Pageable page, String keyword) {
+<span class="nc bnc" id="L81" title="All 2 branches missed.">        if (keyword.isBlank()) {</span>
+<span class="nc" id="L82">            throw new RuntimeException(&quot;키워드는 한 글자 이상이여야 합니다&quot;);</span>
+        } else {
+<span class="nc" id="L84">            Pageable pageable = PageRequest.of(page.getPageNumber(), 100, Sort.by(&quot;createdAt&quot;).descending());</span>
+<span class="nc" id="L85">            List&lt;Article&gt; articles = articleRepository.findArticleByTitleContaining(keyword, pageable);</span>
+<span class="nc" id="L86">            List&lt;ArticleDto&gt; articleDtos = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L87">            articles.stream().forEach(article -&gt; articleDtos.add(new ArticleDto(article.getId(), article.getTitle(), article.getContent(), null, article.getCreatedAt(), article.getUpdatedAt())));</span>
+<span class="nc" id="L88">            return articleDtos;</span>
+        }
+    }
+
+    // 게시글 삭제
+    public void deleteArticle(Long id) throws RuntimeException {
+<span class="nc" id="L94">        Optional&lt;Article&gt; selectedArticle = articleRepository.findById(id);</span>
+<span class="nc bnc" id="L95" title="All 2 branches missed.">        if (selectedArticle.isPresent()) {</span>
+<span class="nc" id="L96">            Article article = selectedArticle.get();</span>
+<span class="nc" id="L97">            articleRepository.delete(article);</span>
+<span class="nc" id="L98">        } else {</span>
+<span class="nc" id="L99">            throw new RuntimeException(&quot;게시글을 찾을 수 없습니다&quot;);</span>
+        }
+<span class="nc" id="L101">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

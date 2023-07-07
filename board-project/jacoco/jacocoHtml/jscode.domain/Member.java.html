@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ko"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Member.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">demo</a> &gt; <a href="index.source.html" class="el_package">jscode.domain</a> &gt; <span class="el_source">Member.java</span></div><h1>Member.java</h1><pre class="source lang-java linenums">package jscode.domain;
+
+import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+
+@Getter
+<span class="nc" id="L20">@Builder</span>
+<span class="fc" id="L21">@NoArgsConstructor</span>
+<span class="nc" id="L22">@AllArgsConstructor</span>
+@Entity
+public class Member extends BaseEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+<span class="fc" id="L27">    private Long id;</span>
+
+    @Column(nullable = false, length = 100)
+<span class="nc" id="L30">    private String email;</span>
+
+    @Column(nullable = false, length = 250)
+<span class="nc" id="L33">    private String password;</span>
+
+<span class="pc" id="L35">    @OneToMany(mappedBy = &quot;member&quot;)</span>
+<span class="nc" id="L36">    private List&lt;Article&gt; articles = new ArrayList&lt;&gt;();</span>
+
+<span class="pc" id="L38">    @OneToMany(mappedBy = &quot;member&quot;)</span>
+<span class="nc" id="L39">    private List&lt;ArticleComments&gt; articleComments = new ArrayList&lt;&gt;();</span>
+
+    @CreatedDate
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+<span class="nc" id="L43">    LocalDateTime createdAt;</span>
+
+    @LastModifiedDate
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+<span class="nc" id="L47">    LocalDateTime updatedAt;</span>
+
+    @Builder
+<span class="nc" id="L50">    public Member(String email, String password, LocalDateTime createdAt, LocalDateTime updatedAt) {</span>
+<span class="nc" id="L51">        this.email = email;</span>
+<span class="nc" id="L52">        this.password = password;</span>
+<span class="nc" id="L53">        this.createdAt = createdAt;</span>
+<span class="nc" id="L54">        this.updatedAt = updatedAt;</span>
+<span class="nc" id="L55">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
