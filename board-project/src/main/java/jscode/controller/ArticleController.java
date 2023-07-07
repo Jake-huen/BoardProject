@@ -1,12 +1,13 @@
 package jscode.controller;
 
-import jscode.dto.ArticleDto;
+import jscode.dto.article.ArticleDto;
 import jscode.service.ArticleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -43,14 +44,14 @@ public class ArticleController {
 
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
-    public ArticleDto createArticle(@Valid @RequestBody ArticleDto articleDto) {
-        return articleService.saveArticle(articleDto);
+    public ArticleDto createArticle(HttpServletRequest request, @Valid @RequestBody ArticleDto articleDto) {
+        return articleService.saveArticle(request, articleDto);
     }
 
     @PostMapping("/change")
     @ResponseStatus(HttpStatus.OK)
-    public ArticleDto changeArticle(@Valid @RequestBody ArticleDto articleDto) {
-        return articleService.updateArticle(articleDto);
+    public ArticleDto changeArticle(HttpServletRequest request, @Valid @RequestBody ArticleDto articleDto) {
+        return articleService.updateArticle(request, articleDto);
     }
 
     @DeleteMapping()

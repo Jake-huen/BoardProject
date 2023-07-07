@@ -1,9 +1,8 @@
-package jscode.dto;
+package jscode.dto.article;
 
+import jscode.dto.member.MemberDto;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 
 import javax.validation.constraints.*;
 import java.time.LocalDateTime;
@@ -21,6 +20,8 @@ public class ArticleDto {
     @NotBlank(message = "게시글 내용 조건 오류")
     @Size(min = 1, max = 1000)
     private final String content;
+
+    private final Long memberId;
 
     private final LocalDateTime createdAt;
     private final LocalDateTime updatedAt;

@@ -35,6 +35,7 @@ public class JwtTokenProvider {
 
     private final long at_exp = 1000L * 60 * 30;
     private final long rt_exp = 1000L & 60 * 60;
+
     // secret key를 가지고 key값 저장
     public JwtTokenProvider(@Value("${jwt.secret}") String salt) {
         this.key = Keys.hmacShaKeyFor(salt.getBytes(StandardCharsets.UTF_8));
@@ -70,6 +71,7 @@ public class JwtTokenProvider {
     // JWT 토큰을 복호화하여 토큰에 들어있는 정보를 꺼내는 메서드
     public Authentication getAuthentication(String accessToken) {
         // 토큰 복호화
+        System.out.println("accessToken = " + accessToken);
         Claims claims = parseClaims(accessToken);
 
         // UserDetails 객체를 만들어서 Authentication 리턴
@@ -83,7 +85,8 @@ public class JwtTokenProvider {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
             return true;
         } catch (RuntimeException e) {
-            throw e;
+            System.out.println("e = " + e);
+            throw new RuntimeException(e);
         }
 
     }
@@ -92,12 +95,20 @@ public class JwtTokenProvider {
         try {
             return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(accessToken).getBody();
         } catch (RuntimeException e) {
-            throw e;
+            System.out.println("ParseClaim 오류 = " + e.getMessage());
+            throw new RuntimeException(e.getMessage());
         }
+    }
+
+    public String getMemberId(String token) {
+        return Jwts.parserBuilder().setSigningKey(salt.getBytes()).build().parseClaimsJws(token).getBody().getSubject();
     }
 
     // Bearer 제외부분
     public String getToken(String token) {
+        if (token.length() < 7) {
+            throw new RuntimeException("토큰에 오류가 있습니다.");
+        }
         token = token.substring(7).trim();
         return token;
     }

@@ -2,6 +2,7 @@ package jscode.service;
 
 import jscode.config.security.JwtTokenProvider;
 import jscode.domain.Member;
+import jscode.dto.member.MemberDto;
 import jscode.dto.member.MemberLogin.MemberLoginResponseDto;
 import jscode.dto.member.MemberSignUp.MemberSignUpRequestDto;
 import jscode.dto.member.MemberSignUp.MemberSignUpResponseDto;
@@ -65,23 +66,19 @@ public class MemberService {
         return responseDto;
     }
 
-    public MemberSignUpResponseDto checkMember(HttpServletRequest request) {
+    public MemberDto checkMember(HttpServletRequest request) {
         String token = jwtTokenProvider.resolveToken(request);
         token = jwtTokenProvider.getToken(token);
         String email = jwtTokenProvider.getEmail(token);
         Optional<Member> member = memberRepository.findByEmail(email);
         if(member.isPresent()){
-            MemberSignUpResponseDto memberSignUpResponseDto = MemberSignUpResponseDto.builder()
-                    .id(member.get().getId())
+            MemberDto memberDto = MemberDto.builder()
                     .email(member.get().getEmail())
                     .createdTime(member.get().getCreatedAt())
                     .build();
-            return memberSignUpResponseDto;
+            return memberDto;
         }else{
             throw new RuntimeException("존재하지 않는 이메일입니다.");
         }
-
-
-
     }
 }
