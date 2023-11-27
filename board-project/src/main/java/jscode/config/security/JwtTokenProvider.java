@@ -34,7 +34,7 @@ public class JwtTokenProvider {
     String salt;
 
     private final long at_exp = 1000L * 60 * 30;
-    private final long rt_exp = 1000L & 60 * 60;
+    private final long rt_exp = 1000L * 60 * 60;
 
     // secret key를 가지고 key값 저장
     public JwtTokenProvider(@Value("${jwt.secret}") String salt) {

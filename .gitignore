@@ -1,3 +1,7 @@
 
 board-project/src/main/resources/application-secure.yml
 board-project/src/main/resources/application-secure.yml
+.DS_Store
+board-project/.DS_Store
+board-project/src/.DS_Store
+.DS_Store
